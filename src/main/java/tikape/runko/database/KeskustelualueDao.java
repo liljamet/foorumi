@@ -18,21 +18,67 @@ import tikape.runko.domain.Keskustelualue;
  * @author lilja
  */
 public class KeskustelualueDao implements Dao<Keskustelualue, Integer> {
+    private Database database;
+    
+    public KeskustelualueDao(Database database) {
+        this.database=database;
+    }
 
     @Override
     public Keskustelualue findOne(Integer key) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelualue WHERE alue_id = ?");
+        stmt.setObject(1, key);
+
+        ResultSet rs = stmt.executeQuery();
+        boolean hasOne = rs.next();
+        if (!hasOne) {
+            return null;
+        }
+        
+        int id = rs.getInt("alue_id");
+        String nimi = rs.getString("nimi");
+        
+        Keskustelualue uusiAlue = new Keskustelualue(id, nimi);
+        
+        rs.close();
+        stmt.close();
+        connection.close();
+       
+        return uusiAlue;
     }
 
     @Override
     public List<Keskustelualue> findAll() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelualue");
+
+        ResultSet rs = stmt.executeQuery();
+        List<Keskustelualue> alueet = new ArrayList<>();
+        while (rs.next()) {
+            Integer id = rs.getInt("id");
+            String nimi = rs.getString("nimi");
+
+            alueet.add(new Keskustelualue(id, nimi));
+        }
+
+        rs.close();
+        stmt.close();
+        connection.close();
+
+        return alueet;
     }
 
     @Override
     public void delete(Integer key) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Connection c = database.getConnection();
+        PreparedStatement s=c.prepareStatement("DELETE FROM Keskustelualue WHERE alue_id = ?");
+        s.setObject(1, key);
+        
+        ResultSet rs=s.executeQuery();
+        rs.close();
+        s.close();
+        c.close();
     }
-    
-    
+
 }
