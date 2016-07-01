@@ -56,7 +56,7 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
         PreparedStatement s = c.prepareStatement("SELECT * FROM Keskustelu");
         ResultSet rs = s.executeQuery();
         
-        List<Keskustelu> keskustelut = new ArrayList();
+        List<Keskustelu> keskustelut = new ArrayList<>();
 
         while (rs.next()) {
             int id = rs.getInt("keskustelu_id");
@@ -77,7 +77,7 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
 
     @Override
     public void delete(Integer key) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
 }
