@@ -8,7 +8,6 @@ package tikape.runko;
 import java.util.HashMap;
 import java.util.Map;
 import spark.ModelAndView;
-import spark.Request;
 import static spark.Spark.get;
 import static spark.Spark.post;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
