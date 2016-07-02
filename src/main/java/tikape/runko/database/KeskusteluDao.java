@@ -11,17 +11,18 @@ import java.util.ArrayList;
 import java.util.List;
 import tikape.runko.domain.Keskustelu;
 import tikape.runko.domain.Keskustelualue;
+import tikape.runko.service.DisplayableKeskustelu;
 
 /**
  *
  * @author lilja
  */
-public class KeskusteluDao implements Dao<Keskustelu, Integer> {
+public class KeskusteluDao implements ExtendedDao<Keskustelu, Integer> {
 
-    private Database database;
+    private FoorumiDatabase database;
 
-    public KeskusteluDao(Database db) {
-        this.database = db;
+    public KeskusteluDao(FoorumiDatabase database) {
+        this.database = database;
     }
 
     @Override
@@ -74,10 +75,17 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
 
         return keskustelut;
     }
+    
+    
 
     @Override
     public void delete(Integer key) throws SQLException {
         
+    }
+
+    @Override
+    public List<DisplayableKeskustelu> findAllKeskusteluWithInfo() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

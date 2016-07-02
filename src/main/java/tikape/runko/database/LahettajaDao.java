@@ -16,9 +16,9 @@ import tikape.runko.domain.Lahettaja;
  */
 public class LahettajaDao implements Dao<Lahettaja, Integer> {
 
-    private Database db;
+    private FoorumiDatabase db;
 
-    public LahettajaDao(Database db) {
+    public LahettajaDao(FoorumiDatabase db) {
         this.db = db;
     }
 

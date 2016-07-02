@@ -22,9 +22,9 @@ import tikape.runko.domain.Viesti;
  */
 public class ViestiDao implements Dao<Viesti, Integer> {
 
-    private Database database;
+    private FoorumiDatabase database;
 
-    public ViestiDao(Database db) {
+    public ViestiDao(FoorumiDatabase db) {
         this.database = db;
     }
 
@@ -78,6 +78,32 @@ public class ViestiDao implements Dao<Viesti, Integer> {
             viestit.add(uusi);
         }
         return viestit;
+    }
+    
+    public Timestamp findLatest(int keskustelu_id) throws SQLException {
+        Connection c = this.database.getConnection();
+        PreparedStatement s = c.prepareStatement("SELECT MAX(kellonaika) FROM Viesti WHERE keskustelu=?");
+        s.setObject(1, keskustelu_id);
+        ResultSet rs = s.executeQuery();
+        
+        List<Timestamp> kellonajat = new ArrayList<>();
+        while(rs.next()) {
+            Timestamp kellonaika = rs.getTimestamp("kellonaika");
+            kellonajat.add(kellonaika);
+        }
+        
+        return kellonajat.get(0);
+    }
+    
+    public int allInKeskustelualue(int keskusteluale_id) throws SQLException {
+        Connection c = this.database.getConnection();
+        PreparedStatement s = c.prepareStatement("SELECT COUNT(viesti_id) FROM Viesti, Keskustelu WHERE Keskustelu.keskusteluale=? AND Keskustelu.keskustelu_id=Viesti.keskustelu");
+        s.setObject(1, keskusteluale_id);
+        
+        ResultSet rs = s.executeQuery();
+        int lukumaara = rs.getInt(1);
+        
+        return lukumaara;
     }
 
     @Override

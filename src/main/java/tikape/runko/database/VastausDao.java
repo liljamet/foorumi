@@ -18,11 +18,12 @@ import tikape.runko.domain.Viesti;
  *
  * @author lilja
  */
-public class VastausDao implements Dao<Vastaus, Integer>{
-    private Database db;
-    
-    public VastausDao(Database db) {
-        this.db=db;
+public class VastausDao implements Dao<Vastaus, Integer> {
+
+    private FoorumiDatabase db;
+
+    public VastausDao(FoorumiDatabase db) {
+        this.db = db;
     }
 
     @Override
@@ -37,14 +38,14 @@ public class VastausDao implements Dao<Vastaus, Integer>{
         Connection c = this.db.getConnection();
         PreparedStatement s = c.prepareStatement("SELECT * FROM Vastaus");
         ResultSet rs = s.executeQuery();
-        
+
         List<Vastaus> vastaukset = new ArrayList<>();
-        
-        while(rs.next()) {
+
+        while (rs.next()) {
             int id = rs.getInt("vastasus_id");
-            int vastattava_id= rs.getInt("viesti_vastattava");
+            int vastattava_id = rs.getInt("viesti_vastattava");
             int vastaus_id = rs.getInt("viesti_vastaus");
-            
+
             ViestiDao dao = new ViestiDao(this.db);
             Viesti vastattava = dao.findOne(vastattava_id);
             Viesti vastaus = dao.findOne(vastaus_id);
@@ -58,5 +59,5 @@ public class VastausDao implements Dao<Vastaus, Integer>{
     public void delete(Integer key) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }
