@@ -63,13 +63,9 @@ public class FoorumiServiceImpl implements FoorumiService {
 
     @Override
     public void luoKayttaja(String nimimerkki) {
-
         Lahettaja lahettaja = new Lahettaja(0, nimimerkki);
-
         try {
-
             lahettajaDao.createNew(lahettaja);
-
         } catch (SQLException ex) {
             throw new RuntimeException("Lahettajan lisääminen epäonnistui", ex);
         }
@@ -84,7 +80,10 @@ public class FoorumiServiceImpl implements FoorumiService {
         }
     }
 
-    public void luoKeskustelu(String keskustelunNimi, int keskustelualueId) {
+    @Override
+    public void luoKeskustelu(UusiKeskustelu uusiKeskustelu) {
+        String keskustelunNimi = uusiKeskustelu.getOtsikko();
+        int keskustelualueId = uusiKeskustelu.getKeskustelualue_id();
         Keskustelu keskustelu = null;
         try {
             keskustelu = new Keskustelu(0, keskustelunNimi, keskustelualueDao.findOne(keskustelualueId));
@@ -93,10 +92,12 @@ public class FoorumiServiceImpl implements FoorumiService {
         }
 
         try {
-            keskusteluDao.createNew(keskustelu);
+            keskustelu = keskusteluDao.createNew(keskustelu);
         } catch (SQLException ex) {
             throw new RuntimeException("Keskustelun lisääminen epäonnistui", ex);
         }
+        
+        luoViesti(uusiKeskustelu.getViesti(), null, keskustelu.getKeskustelu_id(), uusiKeskustelu.getLahettaja_id());
     }
 
     @Override
@@ -119,18 +120,40 @@ public class FoorumiServiceImpl implements FoorumiService {
 
     @Override
     public void luoViesti(String viestiTeksti, int vastattavaViestiId, int keskusteluId, int lahettajaId) {
-        Keskustelu keskustelu;
+        Viesti vastattavaViesti;
+        List<Viesti> viestit;
         try {
-            keskustelu = keskusteluDao.findOne(keskusteluId);
+            vastattavaViesti = viestiDao.findOne(vastattavaViestiId);
+            viestit = viestiDao.findByKeskusteluId(keskusteluId);
         } catch (SQLException ex) {
-            throw new RuntimeException("Keskustelua ei loytynyt", ex);
+            throw new RuntimeException("Tiedon loytaminen epaonnistui", ex);
         }
+        
+        boolean found = false;
+        for(Viesti viesti : viestit) { 
+            if(viesti.getViesti_id() == vastattavaViesti.getViesti_id()) {
+                found = true;
+            }
+        }
+        
+        if(!found) {
+            throw new RuntimeException("Viesti ei kuulunut keskusteluun");
+        }
+        
+        luoViesti(viestiTeksti, vastattavaViesti, keskusteluId, lahettajaId);
+
+    }
+
+    private void luoViesti(String viestiTeksti, Viesti vastattavaViesti, int keskusteluId, int lahettajaId) throws RuntimeException {
+        Keskustelu keskustelu;
         Lahettaja lahettaja;
         try {
+            keskustelu = keskusteluDao.findOne(keskusteluId);
             lahettaja = lahettajaDao.findOne(lahettajaId);
         } catch (SQLException ex) {
-            throw new RuntimeException("Lahettajaa ei loytynyt", ex);
+            throw new RuntimeException("Tietoja ei loytynyt", ex);
         }
+        
         Viesti viesti = new Viesti(0, null, viestiTeksti, keskustelu, lahettaja);
 
         try {
@@ -139,19 +162,11 @@ public class FoorumiServiceImpl implements FoorumiService {
             throw new RuntimeException("Viestin luominen epaonnistui", ex);
         }
 
-        Viesti vastattavaViesti;
-        try {
-            vastattavaViesti = viestiDao.findOne(vastattavaViestiId);
-        } catch (SQLException ex) {
-            throw new RuntimeException("Viestin loytaminen epaonnistui", ex);
-        }
-
         try {
             vastausDao.createNew(new Vastaus(0, vastattavaViesti, viesti));
         } catch (SQLException ex) {
             throw new RuntimeException("Vastauksen luominen epaonnistui", ex);
         }
-
     }
 
 }

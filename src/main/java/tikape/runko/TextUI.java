@@ -12,6 +12,7 @@ import tikape.runko.domain.Viesti;
 import tikape.runko.service.DisplayableKeskustelu;
 import tikape.runko.service.FoorumiService;
 import tikape.runko.service.FoorumiServiceImpl;
+import tikape.runko.service.UusiKeskustelu;
 
 /**
  *
@@ -121,7 +122,7 @@ public class TextUI {
                     this.taso = KayttoliittymaTaso.KESKUSTELU;
                     break;
                 case KESKUSTELU:
-                    break;    
+                    break;
             }
             return;
         }
@@ -131,9 +132,9 @@ public class TextUI {
             service.luoKayttaja(nimimerkki);
             return;
         }
-        
-        if(komento.equals("create")) {
-            switch(taso) {
+
+        if (komento.equals("create")) {
+            switch (taso) {
                 case PAA:
                     luoKeskustelualue();
                     break;
@@ -168,7 +169,7 @@ public class TextUI {
 
     private void printViestit() {
         List<Viesti> viestit = service.getViestit(this.keskusteluId);
-        for(Viesti viesti : viestit) {
+        for (Viesti viesti : viestit) {
             System.out.println(viesti.getViesti_id() + " " + viesti.getLahettaja().getNimimerkki() + " " + viesti.getKellonaika() + "\n"
                     + " " + viesti.getViesti());
         }
@@ -202,18 +203,26 @@ public class TextUI {
 
     private void luoKeskustelualue() {
         System.out.print("Anna uusi keskustelualue: ");
-        String keskustelualueenNimi=lueSyote();
+        String keskustelualueenNimi = lueSyote();
         service.luoKeskustelualue(keskustelualueenNimi);
-        
+
     }
 
     private void luoKeskustelu() {
         System.out.print("Anna uusi keskustelu: ");
-        String keskustelunNimi=lueSyote();
-        service.luoKeskustelu(keskustelunNimi, keskustelualueId);
-//        
-//        System.out.print("Anna kayttaja: ");
-//        String kayttaja = lueNimimerkki();
+        String keskustelunNimi = lueSyote();
+        System.out.print("Kirjoita viesti: ");
+        String viesti = lueSyote();
+        printKayttajat();
+        System.out.print("Valitse nimimerkin id: ");
+        int lahettajaId = Integer.parseInt(lueSyote());
+        
+        UusiKeskustelu uusiKeskustelu = new UusiKeskustelu();
+        uusiKeskustelu.setKeskustelualue_id(keskustelualueId);
+        uusiKeskustelu.setLahettaja_id(lahettajaId);
+        uusiKeskustelu.setOtsikko(keskustelunNimi);
+        uusiKeskustelu.setViesti(viesti);
+        service.luoKeskustelu(uusiKeskustelu);
     }
 
     private void luoViesti() {
@@ -226,12 +235,12 @@ public class TextUI {
         int lahettajaId = Integer.parseInt(lueSyote());
         service.luoViesti(viesti, vastattavaViestiId, this.keskusteluId, lahettajaId);
     }
-    
+
     private void printKayttajat() {
         List<Lahettaja> kayttajat = service.getKayttajat();
-        for(Lahettaja lahettaja : kayttajat) {
+        for (Lahettaja lahettaja : kayttajat) {
             System.out.println(lahettaja.getLahettaja_id() + " " + lahettaja.getNimimerkki());
         }
     }
-    
+
 }

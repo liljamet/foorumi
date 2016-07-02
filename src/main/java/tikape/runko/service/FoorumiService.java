@@ -34,7 +34,7 @@ public interface FoorumiService {
 
     public void luoKeskustelualue(String keskustelualueenNimi);
 
-    public void luoKeskustelu(String keskustelunNimi, int keskustelualueId);
+    public void luoKeskustelu(UusiKeskustelu uusiKeskustelu);
 
     public List<Viesti> getViestit(int keskusteluId);
 

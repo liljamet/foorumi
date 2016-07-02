@@ -64,12 +64,18 @@ public class VastausDao implements Dao<Vastaus, Integer> {
 
     @Override
     public Vastaus createNew(Vastaus newObject) throws SQLException {
-        if (newObject.getVastaus_id()!= 0) {
+        if (newObject.getVastaus_id() != 0) {
             throw new RuntimeException("Tried to create new object with a user defined id");
         }
         Connection c = this.db.getConnection();
         PreparedStatement s = c.prepareStatement("INSERT INTO Vastaus (viesti_vastattava, viesti_vastaus) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
-        s.setObject(1, newObject.getVastattava().getViesti_id());
+        Viesti vastattava = newObject.getVastattava();
+        int vastattavaViestiId = 0;
+        if (vastattava != null) {
+            vastattavaViestiId = vastattava.getViesti_id();
+        }
+
+        s.setObject(1, vastattavaViestiId);
         s.setObject(2, newObject.getVastaus().getViesti_id());
         int newId = createNewObject(s);
         s.close();
