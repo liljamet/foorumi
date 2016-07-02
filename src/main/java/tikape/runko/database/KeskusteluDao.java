@@ -17,7 +17,7 @@ import tikape.runko.service.DisplayableKeskustelu;
  *
  * @author lilja
  */
-public class KeskusteluDao implements ExtendedDao<Keskustelu, Integer> {
+public class KeskusteluDao implements Dao<Keskustelu, Integer> {
 
     private FoorumiDatabase database;
 
@@ -83,8 +83,7 @@ public class KeskusteluDao implements ExtendedDao<Keskustelu, Integer> {
         
     }
 
-    @Override
-    public List<DisplayableKeskustelu> findAllKeskusteluWithInfo() throws SQLException {
+    public List<DisplayableKeskustelu> findAllKeskusteluWithInfo(int keskusteluAlueId) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

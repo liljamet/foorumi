@@ -10,21 +10,16 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import tikape.runko.config.Config;
-import tikape.runko.database.Dao;
 import tikape.runko.database.FoorumiDatabase;
 import tikape.runko.database.KeskusteluDao;
 import tikape.runko.database.KeskustelualueDao;
-import tikape.runko.database.ExtendedDao;
 import tikape.runko.database.ViestiDao;
-import tikape.runko.domain.Keskustelu;
-import tikape.runko.domain.Keskustelualue;
-import tikape.runko.domain.Viesti;
 
 public class FoorumiServiceImpl implements FoorumiService {
 
-    private ExtendedDao<Keskustelualue, Integer> keskustelualueDao;
-    private ExtendedDao<Keskustelu, Integer> keskusteluDao;
-    private Dao<Viesti, Integer> viestiDao;
+    private KeskustelualueDao keskustelualueDao;
+    private KeskusteluDao keskusteluDao;
+    private ViestiDao viestiDao;
 
     public FoorumiServiceImpl() {
         try {
@@ -50,7 +45,7 @@ public class FoorumiServiceImpl implements FoorumiService {
     @Override
     public List<DisplayableKeskustelu> getKeskustelut(int keskusteluAlueId) {
         try {
-            return keskustelualueDao.findAllKeskusteluWithInfo();
+            return keskusteluDao.findAllKeskusteluWithInfo(keskusteluAlueId);
         } catch (SQLException ex) {
             throw new RuntimeException("Haku epäonnistui");
         }

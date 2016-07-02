@@ -19,7 +19,7 @@ import tikape.runko.service.DisplayableKeskustelu;
  *
  * @author lilja
  */
-public class KeskustelualueDao implements ExtendedDao<Keskustelualue, Integer> {
+public class KeskustelualueDao implements Dao<Keskustelualue, Integer> {
 
     private FoorumiDatabase database;
 
@@ -72,7 +72,6 @@ public class KeskustelualueDao implements ExtendedDao<Keskustelualue, Integer> {
         return alueet;
     }
 
-    @Override
     public List<DisplayableKeskustelu> findAllKeskusteluWithInfo() throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement(
