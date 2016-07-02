@@ -10,12 +10,13 @@ package tikape.runko.domain;
  * @author lilja
  */
 public class Keskustelualue {
+
     private int alue_id;
     private String nimi;
-    
+
     public Keskustelualue(int alueID, String nimi) {
-        this.alue_id=alueID;
-        this.nimi=nimi;
+        this.alue_id = alueID;
+        this.nimi = nimi;
     }
 
     /**
@@ -45,7 +46,5 @@ public class Keskustelualue {
     public void setNimi(String nimi) {
         this.nimi = nimi;
     }
-    
-    
-    
+
 }

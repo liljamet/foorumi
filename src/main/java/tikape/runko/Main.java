@@ -4,14 +4,13 @@ import java.util.HashMap;
 import spark.ModelAndView;
 import static spark.Spark.*;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
-import tikape.runko.database.Database;
-import tikape.runko.database.FoorumiDatabase;
-
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        TextUI ui = new TextUI();
+
+//        TextUI ui = new TextUI();
+        GraphicUI ui = new GraphicUI();
         ui.launch();
 //
 //        OpiskelijaDao opiskelijaDao = new OpiskelijaDao(database);
