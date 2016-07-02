@@ -9,8 +9,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import static tikape.runko.database.DaoUtil.createNewObject;
 import tikape.runko.domain.Vastaus;
 import tikape.runko.domain.Viesti;
 
@@ -61,8 +63,18 @@ public class VastausDao implements Dao<Vastaus, Integer> {
     }
 
     @Override
-    public void createNew(Vastaus newObject) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Vastaus createNew(Vastaus newObject) throws SQLException {
+        if (newObject.getVastaus_id()!= 0) {
+            throw new RuntimeException("Tried to create new object with a user defined id");
+        }
+        Connection c = this.db.getConnection();
+        PreparedStatement s = c.prepareStatement("INSERT INTO Vastaus (viesti_vastattava, viesti_vastaus) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
+        s.setObject(1, newObject.getVastattava().getViesti_id());
+        s.setObject(2, newObject.getVastaus().getViesti_id());
+        int newId = createNewObject(s);
+        s.close();
+        c.close();
+        return findOne(newId);
     }
 
 }

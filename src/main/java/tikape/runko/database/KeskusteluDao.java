@@ -9,6 +9,7 @@ import java.sql.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import static tikape.runko.database.DaoUtil.createNewObject;
 import tikape.runko.domain.Keskustelu;
 import tikape.runko.domain.Keskustelualue;
 import tikape.runko.service.DisplayableKeskustelu;
@@ -120,18 +121,18 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     }
 
     @Override
-    public void createNew(Keskustelu newObject) throws SQLException {
+    public Keskustelu createNew(Keskustelu newObject) throws SQLException {
         if (newObject.getKeskustelu_id() != 0) {
             throw new RuntimeException("Tried to create new object with a user defined id");
         }
 
         Connection c = this.database.getConnection();
-        PreparedStatement s = c.prepareStatement("INSERT INTO Keskustelu (otsikko, keskustelualue) VALUES (?,?)");
+        PreparedStatement s = c.prepareStatement("INSERT INTO Keskustelu (otsikko, keskustelualue) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
         s.setObject(1, newObject.getOtsikko());
         s.setObject(2, newObject.getKeskustelualue().getAlue_id());
-        s.execute();
-
+        int newId = createNewObject(s);
         s.close();
         c.close();
+        return findOne(newId);
     }
 }

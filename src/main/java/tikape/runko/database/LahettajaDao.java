@@ -8,6 +8,7 @@ package tikape.runko.database;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import static tikape.runko.database.DaoUtil.createNewObject;
 import tikape.runko.domain.Lahettaja;
 
 /**
@@ -38,6 +39,10 @@ public class LahettajaDao implements Dao<Lahettaja, Integer> {
         String nimim = rs.getString("nimimerkki");
 
         Lahettaja uusi = new Lahettaja(id, nimim);
+
+        rs.close();
+        s.close();
+        c.close();
         return uusi;
 
     }
@@ -56,6 +61,9 @@ public class LahettajaDao implements Dao<Lahettaja, Integer> {
             Lahettaja uusi = new Lahettaja(id, nimim);
             lahettajat.add(uusi);
         }
+        rs.close();
+        s.close();
+        c.close();
         return lahettajat;
     }
 
@@ -65,18 +73,17 @@ public class LahettajaDao implements Dao<Lahettaja, Integer> {
     }
 
     @Override
-    public void createNew(Lahettaja newObject) throws SQLException {
-        
-        if(newObject.getLahettaja_id() != 0){
+    public Lahettaja createNew(Lahettaja newObject) throws SQLException {
+        if (newObject.getLahettaja_id() != 0) {
             throw new RuntimeException("Tried to create new object with a user defined id");
         }
         Connection c = this.db.getConnection();
-        PreparedStatement s = c.prepareStatement("INSERT INTO Lahettaja (nimimerkki) VALUES (?)");
+        PreparedStatement s = c.prepareStatement("INSERT INTO Lahettaja (nimimerkki) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
         s.setObject(1, newObject.getNimimerkki());
-        s.execute();
-        
+        int newId = createNewObject(s);
         s.close();
         c.close();
+        return findOne(newId);
     }
 
 }

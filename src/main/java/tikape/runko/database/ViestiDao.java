@@ -9,10 +9,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import static tikape.runko.database.DaoUtil.createNewObject;
 import tikape.runko.domain.Keskustelu;
 import tikape.runko.domain.Lahettaja;
 import tikape.runko.domain.Viesti;
@@ -53,6 +55,9 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         Lahettaja lahettaja = lDao.findOne(lahettaja_id);
 
         Viesti uusi = new Viesti(id, kellonaika, viesti, keskustelu, lahettaja);
+        rs.close();
+        s.close();
+        c.close();
         return uusi;
     }
 
@@ -78,6 +83,9 @@ public class ViestiDao implements Dao<Viesti, Integer> {
             Viesti uusi = new Viesti(id, kellonaika, viesti, keskustelu, lahettaja);
             viestit.add(uusi);
         }
+        rs.close();
+        s.close();
+        c.close();
         return viestit;
     }
 
@@ -113,22 +121,21 @@ public class ViestiDao implements Dao<Viesti, Integer> {
     }
 
     @Override
-    public void createNew(Viesti newObject) throws SQLException {
+    public Viesti createNew(Viesti newObject) throws SQLException {
         if (newObject.getViesti_id() != 0) {
             throw new RuntimeException("Tried to create new object with a user defined id");
         }
         Connection c = this.database.getConnection();
-        PreparedStatement s = c.prepareStatement("INSERT INTO Viesti (kellonaika, viesti, keskustelu, lahettaja) VALUES (?,?,?)");
+        PreparedStatement s = c.prepareStatement("INSERT INTO Viesti (kellonaika, viesti, keskustelu, lahettaja) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
         Timestamp timestamp = new Timestamp(timestamp());
         s.setObject(1, timestamp);
         s.setObject(2, newObject.getViesti());
         s.setObject(3, newObject.getKeskustelu().getKeskustelu_id());
         s.setObject(4, newObject.getLahettaja().getLahettaja_id());
-        ResultSet rs = s.executeQuery();
-
-        rs.close();
+        int newId = createNewObject(s);
         s.close();
         c.close();
+        return findOne(newId);
     }
 
     private long timestamp() {

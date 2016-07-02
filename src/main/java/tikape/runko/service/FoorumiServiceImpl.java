@@ -134,10 +134,22 @@ public class FoorumiServiceImpl implements FoorumiService {
         Viesti viesti = new Viesti(0, null, viestiTeksti, keskustelu, lahettaja);
 
         try {
-            Viesti uusiViesti = null;// viestiDao.createNew(viesti);
-            vastausDao.createNew(new Vastaus(0, viestiDao.findOne(vastattavaViestiId), uusiViesti));
+            viesti = viestiDao.createNew(viesti);
         } catch (SQLException ex) {
-            Logger.getLogger(FoorumiServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("Viestin luominen epaonnistui", ex);
+        }
+
+        Viesti vastattavaViesti;
+        try {
+            vastattavaViesti = viestiDao.findOne(vastattavaViestiId);
+        } catch (SQLException ex) {
+            throw new RuntimeException("Viestin loytaminen epaonnistui", ex);
+        }
+
+        try {
+            vastausDao.createNew(new Vastaus(0, vastattavaViesti, viesti));
+        } catch (SQLException ex) {
+            throw new RuntimeException("Vastauksen luominen epaonnistui", ex);
         }
 
     }

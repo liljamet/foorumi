@@ -9,9 +9,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import static tikape.runko.database.DaoUtil.createNewObject;
 import tikape.runko.domain.Keskustelualue;
 import tikape.runko.service.DisplayableKeskustelu;
 
@@ -77,14 +79,14 @@ public class KeskustelualueDao implements Dao<Keskustelualue, Integer> {
         PreparedStatement stmt = connection.prepareStatement(
                 "SELECT"
                 + " Keskustelualue.alue_id as id, Keskustelualue.nimi as nimi, COUNT(Viesti.viesti_id) as count,"
-                        + " (CASE WHEN MAX(Viesti.kellonaika) IS NULL"
-                        + " THEN 0"
-                        + " ELSE MAX(Viesti.kellonaika)"
-                        + " END) as kellonaika"
+                + " (CASE WHEN MAX(Viesti.kellonaika) IS NULL"
+                + " THEN 0"
+                + " ELSE MAX(Viesti.kellonaika)"
+                + " END) as kellonaika"
                 + " FROM"
                 + " Keskustelualue"
-                        + " LEFT JOIN Keskustelu ON Keskustelualue.alue_id = Keskustelu.keskustelualue"
-                        + " LEFT JOIN Viesti ON Keskustelu.keskustelu_id = Viesti.keskustelu"
+                + " LEFT JOIN Keskustelu ON Keskustelualue.alue_id = Keskustelu.keskustelualue"
+                + " LEFT JOIN Viesti ON Keskustelu.keskustelu_id = Viesti.keskustelu"
                 + " GROUP BY Keskustelualue.alue_id");
 
         ResultSet rs = stmt.executeQuery();
@@ -122,18 +124,19 @@ public class KeskustelualueDao implements Dao<Keskustelualue, Integer> {
     }
 
     @Override
-    public void createNew(Keskustelualue newObject) throws SQLException {
-        if(newObject.getAlue_id()!= 0){
+    public Keskustelualue createNew(Keskustelualue newObject) throws SQLException {
+        if (newObject.getAlue_id() != 0) {
             throw new RuntimeException("Tried to create new object with a user defined id");
         }
-        
+
         Connection c = this.database.getConnection();
-        PreparedStatement s = c.prepareStatement("INSERT INTO Keskustelualue (nimi) VALUES (?)");
+        String query = "INSERT INTO Keskustelualue (nimi) VALUES (?)";
+        PreparedStatement s = c.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         s.setObject(1, newObject.getNimi());
-        s.execute();
-        
+        int newId = createNewObject(s);
         s.close();
         c.close();
+        return findOne(newId);
     }
 
 }
