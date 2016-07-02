@@ -56,7 +56,7 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
         Connection c = this.database.getConnection();
         PreparedStatement s = c.prepareStatement("SELECT * FROM Keskustelu");
         ResultSet rs = s.executeQuery();
-        
+
         List<Keskustelu> keskustelut = new ArrayList<>();
 
         while (rs.next()) {
@@ -75,16 +75,63 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
 
         return keskustelut;
     }
-    
-    
 
     @Override
     public void delete(Integer key) throws SQLException {
-        
+
     }
 
     public List<DisplayableKeskustelu> findAllKeskusteluWithInfo(int keskusteluAlueId) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement(
+                "SELECT"
+                + " Keskustelu.keskustelu_id AS id, Keskustelu.otsikko AS nimi, COUNT(Viesti.viesti_id) AS lukumaara,"
+                + " (CASE WHEN MAX(Viesti.kellonaika) IS NULL"
+                + " THEN 0"
+                + " ELSE MAX(Viesti.kellonaika)"
+                + " END) as viimeisin"
+                + " FROM"
+                + " Keskustelu"
+                + " LEFT JOIN Viesti ON Keskustelu.keskustelu_id=Viesti.keskustelu"
+                + " WHERE"
+                + " Keskustelu.keskustelualue = ?"
+                + " GROUP BY Keskustelu.keskustelu_id");
+
+        stmt.setObject(1, keskusteluAlueId);
+        ResultSet rs = stmt.executeQuery();
+        List<DisplayableKeskustelu> keskustelut = new ArrayList<>();
+        while (rs.next()) {
+            Integer id = rs.getInt("id");
+            String nimi = rs.getString("nimi");
+            Integer lukumaara = rs.getInt("lukumaara");
+            Timestamp kellonaika = rs.getTimestamp("viimeisin");
+            DisplayableKeskustelu keskustelu = new DisplayableKeskustelu();
+            keskustelu.setId(id);
+            keskustelu.setNimi(nimi);
+            keskustelu.setViestienLukumaara(lukumaara);
+            keskustelu.setViimeisinViesti(kellonaika);
+            keskustelut.add(keskustelu);
+        }
+        rs.close();
+        stmt.close();
+        connection.close();
+
+        return keskustelut;
     }
 
+    @Override
+    public void createNew(Keskustelu newObject) throws SQLException {
+        if (newObject.getKeskustelu_id() != 0) {
+            throw new RuntimeException("Tried to create new object with a user defined id");
+        }
+
+        Connection c = this.database.getConnection();
+        PreparedStatement s = c.prepareStatement("INSERT INTO Keskustelu (otsikko, keskustelualue) VALUES (?,?)");
+        s.setObject(1, newObject.getOtsikko());
+        s.setObject(2, newObject.getKeskustelualue().getAlue_id());
+        s.execute();
+
+        s.close();
+        c.close();
+    }
 }

@@ -12,7 +12,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         TextUI ui = new TextUI();
-        ui.lauch();
+        ui.launch();
 //
 //        OpiskelijaDao opiskelijaDao = new OpiskelijaDao(database);
 //

@@ -7,6 +7,8 @@ package tikape.runko.service;
 
 import java.util.List;
 import tikape.runko.domain.Keskustelualue;
+import tikape.runko.domain.Lahettaja;
+import tikape.runko.domain.Viesti;
 
 /**
  *
@@ -27,4 +29,16 @@ public interface FoorumiService {
      * @return 
      */
     List<DisplayableKeskustelu> getKeskustelut(int keskusteluAlueId);
+
+    public void luoKayttaja(String nimimerkki);
+
+    public void luoKeskustelualue(String keskustelualueenNimi);
+
+    public void luoKeskustelu(String keskustelunNimi, int keskustelualueId);
+
+    public List<Viesti> getViestit(int keskusteluId);
+
+    public List<Lahettaja> getKayttajat();
+
+    public void luoViesti(String viesti, int vastattavaViestiId, int keskusteluId, int lahettajaId);
 }

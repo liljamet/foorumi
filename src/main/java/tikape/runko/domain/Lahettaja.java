@@ -10,12 +10,13 @@ package tikape.runko.domain;
  * @author lilja
  */
 public class Lahettaja {
+
     private int lahettaja_id;
     private String nimimerkki;
-    
+
     public Lahettaja(int id, String nimim) {
-        this.lahettaja_id=id;
-        this.nimimerkki=nimim;
+        this.lahettaja_id = id;
+        this.nimimerkki = nimim;
     }
 
     /**
@@ -45,6 +46,5 @@ public class Lahettaja {
     public void setNimimerkki(String nimimerkki) {
         this.nimimerkki = nimimerkki;
     }
-    
-    
+
 }

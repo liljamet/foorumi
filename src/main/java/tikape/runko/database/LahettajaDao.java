@@ -64,4 +64,19 @@ public class LahettajaDao implements Dao<Lahettaja, Integer> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public void createNew(Lahettaja newObject) throws SQLException {
+        
+        if(newObject.getLahettaja_id() != 0){
+            throw new RuntimeException("Tried to create new object with a user defined id");
+        }
+        Connection c = this.db.getConnection();
+        PreparedStatement s = c.prepareStatement("INSERT INTO Lahettaja (nimimerkki) VALUES (?)");
+        s.setObject(1, newObject.getNimimerkki());
+        s.execute();
+        
+        s.close();
+        c.close();
+    }
+
 }

@@ -76,11 +76,15 @@ public class KeskustelualueDao implements Dao<Keskustelualue, Integer> {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement(
                 "SELECT"
-                + " Keskustelualue.alue_id as id, Keskustelualue.nimi as nimi, COUNT(1) as count, MAX(Viesti.kellonaika) as kellonaika"
+                + " Keskustelualue.alue_id as id, Keskustelualue.nimi as nimi, COUNT(Viesti.viesti_id) as count,"
+                        + " (CASE WHEN MAX(Viesti.kellonaika) IS NULL"
+                        + " THEN 0"
+                        + " ELSE MAX(Viesti.kellonaika)"
+                        + " END) as kellonaika"
                 + " FROM"
-                + " Keskustelualue, Keskustelu, Viesti"
-                + " WHERE"
-                + " Keskustelualue.alue_id = Keskustelu.keskustelualue and Keskustelu.keskustelu_id = Viesti.keskustelu"
+                + " Keskustelualue"
+                        + " LEFT JOIN Keskustelu ON Keskustelualue.alue_id = Keskustelu.keskustelualue"
+                        + " LEFT JOIN Viesti ON Keskustelu.keskustelu_id = Viesti.keskustelu"
                 + " GROUP BY Keskustelualue.alue_id");
 
         ResultSet rs = stmt.executeQuery();
@@ -113,6 +117,21 @@ public class KeskustelualueDao implements Dao<Keskustelualue, Integer> {
 
         ResultSet rs = s.executeQuery();
         rs.close();
+        s.close();
+        c.close();
+    }
+
+    @Override
+    public void createNew(Keskustelualue newObject) throws SQLException {
+        if(newObject.getAlue_id()!= 0){
+            throw new RuntimeException("Tried to create new object with a user defined id");
+        }
+        
+        Connection c = this.database.getConnection();
+        PreparedStatement s = c.prepareStatement("INSERT INTO Keskustelualue (nimi) VALUES (?)");
+        s.setObject(1, newObject.getNimi());
+        s.execute();
+        
         s.close();
         c.close();
     }
