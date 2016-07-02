@@ -11,26 +11,26 @@ package tikape.runko.domain;
  */
 public class Lahettaja {
 
-    private int lahettaja_id;
+    private int lahettajaId;
     private String nimimerkki;
 
     public Lahettaja(int id, String nimim) {
-        this.lahettaja_id = id;
+        this.lahettajaId = id;
         this.nimimerkki = nimim;
     }
 
     /**
      * @return the lahettaja_id
      */
-    public int getLahettaja_id() {
-        return lahettaja_id;
+    public int getLahettajaId() {
+        return lahettajaId;
     }
 
     /**
      * @param lahettaja_id the lahettaja_id to set
      */
-    public void setLahettaja_id(int lahettaja_id) {
-        this.lahettaja_id = lahettaja_id;
+    public void setLahettajaId(int lahettaja_id) {
+        this.lahettajaId = lahettaja_id;
     }
 
     /**

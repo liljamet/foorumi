@@ -239,7 +239,7 @@ public class TextUI {
     private void printKayttajat() {
         List<Lahettaja> kayttajat = service.getKayttajat();
         for (Lahettaja lahettaja : kayttajat) {
-            System.out.println(lahettaja.getLahettaja_id() + " " + lahettaja.getNimimerkki());
+            System.out.println(lahettaja.getLahettajaId() + " " + lahettaja.getNimimerkki());
         }
     }
 

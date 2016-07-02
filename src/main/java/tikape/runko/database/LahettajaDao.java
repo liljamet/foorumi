@@ -74,7 +74,7 @@ public class LahettajaDao implements Dao<Lahettaja, Integer> {
 
     @Override
     public Lahettaja createNew(Lahettaja newObject) throws SQLException {
-        if (newObject.getLahettaja_id() != 0) {
+        if (newObject.getLahettajaId() != 0) {
             throw new RuntimeException("Tried to create new object with a user defined id");
         }
         Connection c = this.db.getConnection();

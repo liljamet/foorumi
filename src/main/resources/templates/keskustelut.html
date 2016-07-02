@@ -1,0 +1,50 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>Otsikko</title>
+        <meta charset="utf-8" />
+    </head>
+
+    <body>
+        <h1>Tervetuloa keskustelufoorumille!</h1>
+        <div>
+            <a th:href="${'/'}">Takaisin</a>
+        </div>
+        <table>
+            <tr>
+                <th>Otsikko</th>
+                <th>Viestejä</th>
+                <th>Viimeisin viesti</th>
+            </tr>
+            <tr th:each="keskustelu: ${keskustelut}">
+                <td th:text="${keskustelu.nimi}">Keskustelualueen nimi</td>
+                <td th:text="${keskustelu.viestienLukumaara}">Keskustelualueen viestien lukumäärä</td>
+                <td th:text="${keskustelu.viimeisinViesti}">Keskustelualueen viimeisin viesti</td>
+                <td><a th:href="${'/keskustelut/' + keskustelu.id}">linkki</a></td>
+            </tr>
+        </table>
+
+        <div>
+            <form method="POST" th:action="'/keskustelualue/' + ${keskustelualueId}">
+                Otsikko:<br/>
+                <input type="text" name="otsikko"/><br/>
+                Viesti:<br/>
+                <input type="text" name="viesti"/><br/>
+                Käyttäjän id:<br/>
+                <input type="text" name="kayttajaid"/><br/>
+                <input type="submit" value="Lisää Keskustelu"/><br/>
+            </form>
+            <table>
+                <tr>
+                    <th>id</th>
+                    <th>Käyttäjänimi</th>
+                </tr>
+                <tr th:each="lahettaja: ${lahettajat}">
+                    <td th:text="${lahettaja.lahettajaId}">id</td>
+                    <td th:text="${lahettaja.nimimerkki}">Käyttjänimi</td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>

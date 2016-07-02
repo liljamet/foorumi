@@ -8,19 +8,23 @@
 
     <body>
         <h1>Tervetuloa keskustelufoorumille!</h1>
-
-        <ol>
-            <li th:each="keskustelualue: ${keskustelualueet}">
-                <span th:text="${keskustelualue.nimi}">Keskustelualueen nimi</span>
-                <span th:text="${keskustelualue.viestienLukumaara}">Keskustelualueen viestien lukumäärä</span>
-                <span th:text="${keskustelualue.viimeisinViesti}">Keskustelualueen viimeisin viesti</span>
-                <a th:href="${'/keskustelualueet/' + keskustelualue.id}">linkki</a>
-            </li>
-        </ol>
+        <table>
+            <tr>
+                <th>Otsikko</th>
+                <th>Viestejä</th>
+                <th>Viimeisin viesti</th>
+            </tr>
+            <tr th:each="keskustelualue: ${keskustelualueet}">
+                <td th:text="${keskustelualue.nimi}">Keskustelualueen nimi</td>
+                <td th:text="${keskustelualue.viestienLukumaara}">Keskustelualueen viestien lukumäärä</td>
+                <td th:text="${keskustelualue.viimeisinViesti}">Keskustelualueen viimeisin viesti</td>
+                <td><a th:href="${'/keskustelualue/' + keskustelualue.id}">linkki</a></td>
+            </tr>
+        </table>
 
         <div>
             <form method="POST" action="/">
-                Nimi:<br/>
+                Otsikko:<br/>
                 <input type="text" name="nimi"/><br/>
                 <input type="submit" value="Lisää Keskustelualue"/>
             </form>

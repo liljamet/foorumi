@@ -131,7 +131,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         s.setObject(1, timestamp);
         s.setObject(2, newObject.getViesti());
         s.setObject(3, newObject.getKeskustelu().getKeskustelu_id());
-        s.setObject(4, newObject.getLahettaja().getLahettaja_id());
+        s.setObject(4, newObject.getLahettaja().getLahettajaId());
         int newId = createNewObject(s);
         s.close();
         c.close();
