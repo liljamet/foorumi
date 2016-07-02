@@ -18,6 +18,7 @@ public class Config {
     public static FoorumiDatabase getDatabase() throws ClassNotFoundException {
         if (database == null) {
             database = new FoorumiDatabase("jdbc:sqlite:foorumi.db");
+            database.init();
         }
         return database;
     }
