@@ -12,18 +12,19 @@ import java.sql.Timestamp;
  * @author lilja
  */
 public class Viesti {
+
     private int viesti_id;
     private Timestamp kellonaika;
     private String viesti;
     private Keskustelu keskustelu;
     private Lahettaja lahettaja;
-    
+
     public Viesti(int id, Timestamp kellonaika, String viesti, Keskustelu keskustelu, Lahettaja lahettaja) {
-        this.kellonaika=kellonaika;
-        this.keskustelu=keskustelu;
-        this.lahettaja=lahettaja;
-        this.viesti=viesti;
-        this.viesti_id=id;
+        this.kellonaika = kellonaika;
+        this.keskustelu = keskustelu;
+        this.lahettaja = lahettaja;
+        this.viesti = viesti;
+        this.viesti_id = id;
     }
 
     /**
@@ -95,8 +96,5 @@ public class Viesti {
     public void setLahettaja(Lahettaja lahettaja) {
         this.lahettaja = lahettaja;
     }
-    
-    
-    
-    
+
 }

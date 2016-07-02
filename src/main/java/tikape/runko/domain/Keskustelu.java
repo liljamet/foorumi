@@ -10,14 +10,15 @@ package tikape.runko.domain;
  * @author lilja
  */
 public class Keskustelu {
+
     private int keskustelu_id;
     private String otsikko;
     private Keskustelualue keskustelualue;
-    
+
     public Keskustelu(int keskusteluID, String otsikko, Keskustelualue keskus) {
-        this.keskustelu_id=keskusteluID;
-        this.otsikko=otsikko;
-        this.keskustelualue=keskus;
+        this.keskustelu_id = keskusteluID;
+        this.otsikko = otsikko;
+        this.keskustelualue = keskus;
     }
 
     /**
@@ -61,6 +62,5 @@ public class Keskustelu {
     public void setKeskustelualue(Keskustelualue keskustelualue) {
         this.keskustelualue = keskustelualue;
     }
-    
-    
+
 }

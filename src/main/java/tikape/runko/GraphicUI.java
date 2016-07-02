@@ -43,21 +43,21 @@ public class GraphicUI {
         get("/keskustelualue/:id", (req, res) -> {
             return getKeskustelutNakyma(Integer.parseInt(req.params("id")));
         }, new ThymeleafTemplateEngine());
-        
+
         post("/keskustelualue/:id", (req, res) -> {
             String otsikko = req.queryParams("otsikko");
             String viesti = req.queryParams("viesti");
             int keskustelualueId = Integer.parseInt(req.params("id"));
             int kayttajaId = Integer.parseInt(req.queryParams("kayttajaid"));
-            
+
             UusiKeskustelu uusiKeskustelu = new UusiKeskustelu();
             uusiKeskustelu.setKeskustelualue_id(keskustelualueId);
             uusiKeskustelu.setOtsikko(otsikko);
             uusiKeskustelu.setViesti(viesti);
             uusiKeskustelu.setLahettaja_id(kayttajaId);
-            
+
             service.luoKeskustelu(uusiKeskustelu);
-            
+
             return getKeskustelutNakyma(keskustelualueId);
         }, new ThymeleafTemplateEngine());
 

@@ -16,9 +16,9 @@ public class Vastaus {
     private Viesti vastaus;
 
     public Vastaus(int id, Viesti vastattava, Viesti vastaus) {
-        this.vastattava=vastattava;
-        this.vastaus=vastaus;
-        this.vastaus_id=id;
+        this.vastattava = vastattava;
+        this.vastaus = vastaus;
+        this.vastaus_id = id;
     }
 
     /**
@@ -62,6 +62,5 @@ public class Vastaus {
     public void setVastaus(Viesti vastaus) {
         this.vastaus = vastaus;
     }
-    
-    
+
 }

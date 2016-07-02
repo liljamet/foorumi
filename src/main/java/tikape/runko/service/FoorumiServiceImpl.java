@@ -96,7 +96,7 @@ public class FoorumiServiceImpl implements FoorumiService {
         } catch (SQLException ex) {
             throw new RuntimeException("Keskustelun lisääminen epäonnistui", ex);
         }
-        
+
         luoViesti(uusiKeskustelu.getViesti(), null, keskustelu.getKeskustelu_id(), uusiKeskustelu.getLahettaja_id());
     }
 
@@ -128,18 +128,18 @@ public class FoorumiServiceImpl implements FoorumiService {
         } catch (SQLException ex) {
             throw new RuntimeException("Tiedon loytaminen epaonnistui", ex);
         }
-        
+
         boolean found = false;
-        for(Viesti viesti : viestit) { 
-            if(viesti.getViesti_id() == vastattavaViesti.getViesti_id()) {
+        for (Viesti viesti : viestit) {
+            if (viesti.getViesti_id() == vastattavaViesti.getViesti_id()) {
                 found = true;
             }
         }
-        
-        if(!found) {
+
+        if (!found) {
             throw new RuntimeException("Viesti ei kuulunut keskusteluun");
         }
-        
+
         luoViesti(viestiTeksti, vastattavaViesti, keskusteluId, lahettajaId);
 
     }
@@ -153,7 +153,7 @@ public class FoorumiServiceImpl implements FoorumiService {
         } catch (SQLException ex) {
             throw new RuntimeException("Tietoja ei loytynyt", ex);
         }
-        
+
         Viesti viesti = new Viesti(0, null, viestiTeksti, keskustelu, lahettaja);
 
         try {

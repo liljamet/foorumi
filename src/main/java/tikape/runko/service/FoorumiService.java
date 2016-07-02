@@ -6,7 +6,6 @@
 package tikape.runko.service;
 
 import java.util.List;
-import tikape.runko.domain.Keskustelualue;
 import tikape.runko.domain.Lahettaja;
 import tikape.runko.domain.Viesti;
 
@@ -15,18 +14,21 @@ import tikape.runko.domain.Viesti;
  * @author lilja
  */
 public interface FoorumiService {
+
     /**
      * Palauttaa listan DisplayableKeskustelu objekteja, joka vastaa
      * keskustelualueita
-     * @return 
+     *
+     * @return
      */
     List<DisplayableKeskustelu> getKeskustelualueet();
-    
+
     /**
      * Palauttaa listan DisplayableKeskustelu objekteja, joka vastaa
      * keskustelualueen keskusteluja
+     *
      * @param keskusteluAlueId
-     * @return 
+     * @return
      */
     List<DisplayableKeskustelu> getKeskustelut(int keskusteluAlueId);
 

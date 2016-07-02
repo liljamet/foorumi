@@ -216,7 +216,7 @@ public class TextUI {
         printKayttajat();
         System.out.print("Valitse nimimerkin id: ");
         int lahettajaId = Integer.parseInt(lueSyote());
-        
+
         UusiKeskustelu uusiKeskustelu = new UusiKeskustelu();
         uusiKeskustelu.setKeskustelualue_id(keskustelualueId);
         uusiKeskustelu.setLahettaja_id(lahettajaId);

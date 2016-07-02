@@ -12,7 +12,7 @@ import java.sql.Timestamp;
  * @author lilja
  */
 public class DisplayableKeskustelu {
-    
+
     private int id;
     private String nimi;
     private int viestienLukumaara;
@@ -25,7 +25,7 @@ public class DisplayableKeskustelu {
     public void setId(int id) {
         this.id = id;
     }
-    
+
     public String getNimi() {
         return nimi;
     }
@@ -49,6 +49,5 @@ public class DisplayableKeskustelu {
     public void setViimeisinViesti(Timestamp viimeisinViesti) {
         this.viimeisinViesti = viimeisinViesti;
     }
-    
-    
+
 }

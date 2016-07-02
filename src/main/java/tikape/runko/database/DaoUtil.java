@@ -14,7 +14,7 @@ import java.sql.SQLException;
  * @author lilja
  */
 public class DaoUtil {
-    
+
     public static int createNewObject(PreparedStatement s) throws SQLException {
         s.executeUpdate();
         ResultSet rs = s.getGeneratedKeys();
@@ -25,5 +25,5 @@ public class DaoUtil {
         rs.close();
         return newId;
     }
-    
+
 }

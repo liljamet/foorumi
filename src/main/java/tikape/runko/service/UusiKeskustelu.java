@@ -10,7 +10,7 @@ package tikape.runko.service;
  * @author lilja
  */
 public class UusiKeskustelu {
-    
+
     private String otsikko;
     private String viesti;
     private int keskustelualue_id;
@@ -47,7 +47,5 @@ public class UusiKeskustelu {
     public void setLahettaja_id(int lahettaja_id) {
         this.lahettaja_id = lahettaja_id;
     }
-    
-    
-    
+
 }
